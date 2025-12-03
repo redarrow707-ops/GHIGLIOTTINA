@@ -183,8 +183,8 @@ function renderPairs(){
   if(game.round >= 5){ startFinalPhase(); return; }
   const pair = pairOrder[game.round];
   const correctOnA = Math.random() < 0.5;
-  choiceA.textContent = `A:   ${correctOnA ? pair[0] : pair[1]}  `;
-  choiceB.textContent = `B:   ${correctOnA ? pair[1] : pair[0]}  `;
+  choiceA.textContent = `    ${correctOnA ? pair[0] : pair[1]}  `;
+  choiceB.textContent = `    ${correctOnA ? pair[1] : pair[0]}  `;
   choiceA.dataset.correct = correctOnA ? 'yes' : 'no';
   choiceB.dataset.correct = correctOnA ? 'no' : 'yes';
   choiceA.dataset.correctWord = pair[0];
