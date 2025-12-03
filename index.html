@@ -135,7 +135,7 @@ class GhigliottinaGame {
     const norm = s => String(s).normalize('NFD').replace(/\p{Diacritic}/gu,'').trim().toUpperCase();
     const win = norm(guess) === norm(this.word);
     if(win){
-      this.score += 3400;
+      this.score += 3200;
     } else {
       this.score = this.score / 2;
       this.errors += 1;
