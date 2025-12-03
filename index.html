@@ -42,7 +42,7 @@
         <div class="rules"><p> </p> Scegli i 5 indizi. <p> </p> Ogni scelta sbagliata dimezza il punteggio.<p> </p> Hai 3 minuti per indovinare la parola.<p> </p> Bonus per i secondi risparmiati! </div>
       </div>
       <div class="status">
-        <div class="score">Punteggio: <span id="score">5000</span></div>
+        <div class="score">Punteggio: <span id="score">16000</span></div>
         <div class="small">Errori: <span id="errors">0</span>/6</div>
         <div class="timer">Tempo rimasto: <span id="gameTimer">180</span></div>
       </div>
@@ -96,7 +96,7 @@
 <script>
 // Game engine (cleaned and fixed)
 class GhigliottinaGame {
-  constructor(baseScore = 5000){
+  constructor(baseScore = 16000){
     this.baseScore = baseScore;
     this.reset();
   }
@@ -135,7 +135,7 @@ class GhigliottinaGame {
     const norm = s => String(s).normalize('NFD').replace(/\p{Diacritic}/gu,'').trim().toUpperCase();
     const win = norm(guess) === norm(this.word);
     if(win){
-      this.score += 3200;
+      this.score += 2200;
     } else {
       this.score = this.score / 2;
       this.errors += 1;
@@ -153,7 +153,7 @@ try{
   initialData = { word: 'RADIO', pairs: [] };
 }
 
-const game = new GhigliottinaGame(5000);
+const game = new GhigliottinaGame(16000);
 game.load(initialData);
 
 // UI refs
