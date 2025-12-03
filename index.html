@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ghigliottina — Gioco di parole</title>
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--accent:#ffb86b;--muted:#9aa4b2;--success:#6ee7b7;--danger:#ff6b6b}
+    *{box-sizing:border-box;font-family:Inter,Segoe UI,Arial,sans-serif}
+    body{margin:0;background:linear-gradient(180deg,#071024,#081226);color:#e6eef6;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+    .wrap{width:980px;max-width:100%;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.04);border-radius:12px;padding:20px}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+    h1{font-size:20px;margin:0}
+    .rules{font-size:13px;color:var(--muted)}
+    .row{display:flex;gap:14px}
+    .col{flex:1}
+    .card{background:var(--card);padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);animation:fadeIn 0.7s ease}
+    .choices{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+    button.choice{padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;cursor:pointer;font-weight:600;transition:0.2s}
+    button.choice:hover:not([disabled]){transform:scale(1.05);transition:0.15s}
+    button.choice[disabled]{opacity:0.45;cursor:default}
+    .status{display:flex;gap:12px;align-items:center}
+    .score{font-weight:700;font-size:18px}
+    .small{font-size:13px;color:var(--muted)}
+    .timer{font-weight:800;font-size:18px}
+    .feedback{margin-top:10px;font-weight:700}
+    input.final-input{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit}
+    .result{margin-top:12px;padding:10px;border-radius:8px}
+    .result.success{background:linear-gradient(90deg, rgba(110,231,183,0.12), rgba(110,231,183,0.06));border:1px solid rgba(110,231,183,0.12);color:var(--success)}
+    .result.fail{background:linear-gradient(90deg, rgba(255,107,107,0.08), rgba(255,107,107,0.04));border:1px solid rgba(255,107,107,0.08);color:var(--danger)}
+    @keyframes fadeIn{to{opacity:1}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Ghigliottina — Gioco di parole</h1>
+        <div class="rules">Scegli 5 indizi (da coppie A/B). Ogni scelta sbagliata dimezza il punteggio. Hai 3 minuti totali per indovinare la parola. Risposta corretta = +5200 punti.</div>
+      </div>
+      <div class="status">
+        <div class="score">Punteggio: <span id="score">4800</span></div>
+        <div class="small">Errori: <span id="errors">0</span>/5</div>
+        <div class="timer">Tempo rimasto: <span id="gameTimer">180</span></div>
+      </div>
+    </header>
+
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <div id="roundInfo" class="small">Indizio 1 di 5</div>
+          <div id="clueContainer" style="margin-top:8px">
+            <div class="choices">
+              <button id="choiceA" class="choice">A</button>
+              <button id="choiceB" class="choice">B</button>
+            </div>
+          </div>
+          <div id="feedback" class="feedback small"></div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <div class="small">Inserisci qui la parola finale (si attiva dopo il 5° indizio)</div>
+          <input id="finalInput" class="final-input" placeholder="Scrivi la parola finale..." disabled />
+          <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+            <button id="submitFinal" class="btn" disabled>Invia</button>
+          </div>
+          <div id="resultBox"></div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <div class="small">Cronologia scelte</div>
+          <ol id="history" style="margin-top:8px;color:var(--muted)"></ol>
+        </div>
+      </div>
+    </div>
+
+    <footer>Creato come prototipo — codice aperto.</footer>
+  </div>
+
+  <script id="gameData" type="application/json">
+  {
+    "word": "RADIO",
+    "pairs": [
+      ["EMITTENTE","TILDE"],
+      ["ONDE","MARE"],
+      ["CURIE","EINSTEIN"],
+      ["AM","BE"],
+      ["STAZIONE","AEROPORTO"]
+    ]
+  }
+  </script>
+
+<script>
+class GhigliottinaGame {
+  constructor(baseScore = 4800){
+    this.baseScore = baseScore;
+    this.reset();
+  }
+
+  load(data){
+    this.word = String(data.word || '').trim();
+    this.pairs = (data.pairs || []).map(p => [String(p[0]), String(p[1])]);
+    this.reset();
+  }
+
+  reset(){
+    this.score = this.baseScore;
+    this.errors = 0;
+    this.round = 0;
+    this.history = [];
+    this.finalPhase = false;
+  }
+
+  pick(isCorrect){
+    if(!isCorrect){
+      this.score /= 2;
+      this.errors++;
+    }
+    this.history.push({round: this.round + 1, correct: !!isCorrect});
+    return !!isCorrect;
+  }
+
+  nextRound(){
+    this.round++;
+    return this.round >= 5;
+  }
+
+  checkFinal(guess){
+    const norm = s => String(s).normalize('NFD').replace(/\p{Diacritic}/gu,'').trim().toUpperCase();
+    const win = norm(guess) === norm(this.word);
+    if(win){ this.score += 5200; }
+    else { this.score /= 2; }
+    return win;
+  }
+}
+
+const dataScript = document.getElementById('gameData');
+let initialData = JSON.parse(dataScript.textContent);
+const game = new GhigliottinaGame(4800);
+game.load(initialData);
+
+const scoreEl = document.getElementById('score');
+const errorsEl = document.getElementById('errors');
+const roundInfo = document.getElementById('roundInfo');
+const choiceA = document.getElementById('choiceA');
+const choiceB = document.getElementById('choiceB');
+const feedback = document.getElementById('feedback');
+const finalInput = document.getElementById('finalInput');
+const submitFinal = document.getElementById('submitFinal');
+const resultBox = document.getElementById('resultBox');
+const historyEl = document.getElementById('history');
+const gameTimerEl = document.getElementById('gameTimer');
+
+let chosenThisRound = null;
+let gameTimer = null;
+let totalTimeLeft = 180;
+let pairOrder = [...game.pairs];
+
+function updateUI(){
+  scoreEl.textContent = Math.round(game.score);
+  errorsEl.textContent = game.errors;
+  roundInfo.textContent = game.finalPhase ? 'Tempo per indovinare' : `Indizio ${game.round+1} di 5`;
+  gameTimerEl.textContent = totalTimeLeft;
+}
+
+function renderPairs(){
+  if(game.round >= 5){ startFinalPhase(); return; }
+  const pair = pairOrder[game.round];
+  const correctOnA = Math.random() < 0.5;
+  choiceA.textContent = `A: ${correctOnA ? pair[0] : pair[1]}`;
+  choiceB.textContent = `B: ${correctOnA ? pair[1] : pair[0]}`;
+  choiceA.dataset.correct = correctOnA ? 'yes' : 'no';
+  choiceB.dataset.correct = correctOnA ? 'no' : 'yes';
+  choiceA.disabled = choiceB.disabled = false;
+  chosenThisRound = null;
+  feedback.textContent = 'Scegli la parola che pensi sia l\'indizio corretto.';
+}
+
+function pickChoice(btn){
+  if(chosenThisRound || game.finalPhase) return;
+  const isCorrect = btn.dataset.correct === 'yes';
+  chosenThisRound = btn.textContent[0];
+  choiceA.disabled = choiceB.disabled = true;
+  game.pick(isCorrect);
+  feedback.textContent = isCorrect ? 'Corretto!' : 'Sbagliato — punteggio dimezzato.';
+  feedback.style.color = isCorrect ? 'var(--success)' : 'var(--danger)';
+  const selText = btn.textContent.replace(/^.:\s*/, '');
+  const li = document.createElement('li');
+  li.textContent = `R${game.round+1}: hai scelto ${chosenThisRound} — "${selText}" (${isCorrect ? 'corretto':'sbagliato'})`;
+  historyEl.appendChild(li);
+  updateUI();
+  setTimeout(()=>{ game.nextRound(); renderPairs(); }, 600);
+}
+
+function startFinalPhase(){
+  game.finalPhase = true;
+  finalInput.disabled = submitFinal.disabled = false;
+  finalInput.focus();
+}
+
+function finishFinal(win, message){
+  game.finalPhase = false;
+  finalInput.disabled = submitFinal.disabled = true;
+  if(win){
+    resultBox.innerHTML = `<div class="result success">${message}. Punteggio finale: <strong>${Math.round(game.score)}</strong></div>`;
+  } else {
+    resultBox.innerHTML = `<div class="result fail">${message}. Punteggio finale: <strong>${Math.round(game.score)}</strong></div>`;
+  }
+  updateUI();
+}
+
+choiceA.addEventListener('click', ()=>pickChoice(choiceA));
+choiceB.addEventListener('click', ()=>pickChoice(choiceB));
+submitFinal.addEventListener('click', ()=>{
+  const guess = finalInput.value.trim();
+  if(!guess) { alert('Inserisci una parola.'); return; }
+  const win = game.checkFinal(guess);
+  finishFinal(win, win ? 'Hai indovinato' : 'Risposta errata');
+});
+
+(function init(){
+  renderPairs();
+  updateUI();
+  gameTimer = setInterval(()=>{
+    totalTimeLeft--;
+    if(totalTimeLeft <= 0){
+      clearInterval(gameTimer);
+      if(!game.finalPhase){
+        game.score /= 2;
+        finishFinal(false, 'Tempo scaduto');
+      }
+    }
+    updateUI();
+  },1000);
+})();
+</script>
+</body>
+</html>
