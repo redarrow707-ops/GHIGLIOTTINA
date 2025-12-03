@@ -59,7 +59,7 @@
         </div>
 
         <div class="card" style="margin-top:12px">
-          <div class="small">Inserisci qui la parola finale </div>
+          <div class="small">Inserisci qui la parola finale (si attiva dopo il 5° indizio)</div>
           <input id="finalInput" class="final-input" placeholder="Scrivi la parola finale..." disabled />
           <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
             <button id="submitFinal" class="btn" disabled>Invia</button>
@@ -74,7 +74,7 @@
       </div>
     </div>
 
-    <footer> Designed by Nero Tulip </footer>
+    <footer>Creato come prototipo — codice aperto.</footer>
   </div>
 
   <script id="gameData" type="application/json">
@@ -187,8 +187,8 @@ function renderPairs(){
   if(game.round >= 5){ startFinalPhase(); return; }
   const pair = pairOrder[game.round];
   const correctOnA = Math.random() < 0.5;
-  choiceA.textContent = `   ${correctOnA ? pair[0] : pair[1]} `;
-  choiceB.textContent = `   ${correctOnA ? pair[1] : pair[0]} `;
+  choiceA.textContent = `A: **${correctOnA ? pair[0] : pair[1]}**`;
+  choiceB.textContent = `B: **${correctOnA ? pair[1] : pair[0]}**`;
   choiceA.dataset.correct = correctOnA ? 'yes' : 'no';
   choiceB.dataset.correct = correctOnA ? 'no' : 'yes';
   choiceA.dataset.correctWord = pair[0];
