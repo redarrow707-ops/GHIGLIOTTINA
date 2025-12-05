@@ -41,7 +41,7 @@
         <div class="rules">Scegli i 5 indizi. Ogni scelta sbagliata dimezza il punteggio. <p> </p> Hai 3 minuti per indovinare la parola. Bonus per i secondi risparmiati!</div>
       </div>
       <div class="status">
-        <div class="score">Punteggio: <span id="score">4800</span></div>
+        <div class="score">Punteggio: <span id="score">16000</span></div>
         <div class="small">Errori: <span id="errors">0</span>/5</div>
         <div class="timer">Tempo rimasto: <span id="gameTimer">180</span></div>
       </div>
@@ -96,7 +96,7 @@
 <script>
 /* ------- Game engine ------- */
 class GhigliottinaGame {
-  constructor(baseScore = 4800){
+  constructor(baseScore = 16000){
     this.baseScore = baseScore;
     this.reset();
   }
@@ -132,7 +132,7 @@ class GhigliottinaGame {
   checkFinal(guess){
     const norm = s => String(s).normalize('NFD').replace(/\p{Diacritic}/gu,'').trim().toUpperCase();
     const win = norm(guess) === norm(this.word);
-    if(win){ this.score += 5200; }
+    if(win){ this.score += 32200; }
     else { this.score = Math.floor(this.score / 2); this.errors += 1; }
     return win;
   }
@@ -143,7 +143,7 @@ const dataScript = document.getElementById('gameData');
 let initialData;
 try{ initialData = JSON.parse(dataScript.textContent); } catch(e){ initialData = { word: 'SALTO', pairs: [] }; }
 
-const game = new GhigliottinaGame(4800);
+const game = new GhigliottinaGame(16000);
 game.load(initialData);
 
 const scoreEl = document.getElementById('score');
