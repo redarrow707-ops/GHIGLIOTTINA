@@ -8,15 +8,15 @@
     :root{--bg:#1c2a45;--card:#162135;--accent:#ffb86b;--muted:#9aa4b2;--success:#6ee7b7;--danger:#ff6b6b}
     *{box-sizing:border-box;font-family:Inter,Segoe UI,Arial,sans-serif}
     body{margin:0;background:linear-gradient(180deg,#1c2a45,#162135);color:#e6eef6;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
-    .wrap{width:980px;max-width:100%;background:linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02));border:10px solid rgba(255,255,255,0.06);border-radius:12px;padding:20px}
+    .wrap{width:980px;max-width:100%;background:linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:20px}
     header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
     h1{font-size:22px;margin:0}
     .rules{font-size:14px;color:var(--muted)}
     .row{display:flex;gap:14px}
     .col{flex:1}
-    .card{background:var(--card);padding:20px;border-radius:12px;border:12px solid rgba(255,255,255,0.04);animation:fadeIn 0.7s ease}
+    .card{background:var(--card);padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);animation:fadeIn 0.7s ease}
     .choices{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
-    button.choice{padding:20px;border-radius:8px;border:10px solid rgba(255,255,255,0.04);background:transparent;color:inherit;cursor:pointer;font-weight:700;font-size:18px;transition:0.2s}
+    button.choice{padding:14px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;cursor:pointer;font-weight:700;font-size:18px;transition:0.2s}
     button.choice:hover:not([disabled]){transform:scale(1.05);transition:0.15s}
     button.choice[disabled]{opacity:0.45;cursor:default}
     .status{display:flex;gap:12px;align-items:center}
@@ -24,12 +24,11 @@
     .small{font-size:13px;color:var(--muted)}
     .timer{font-weight:800;font-size:18px}
     .feedback{margin-top:10px;font-weight:700}
-    input.final-input{width:100%;padding:20px;border-radius:8px;border:10px solid rgba(255,255,255,0.06);background:transparent;color:inherit}
-    .result{margin-top:12px;padding:20px;border-radius:8px}
-    .result.success{background:linear-gradient(90deg, rgba(110,231,183,0.12), rgba(110,231,183,0.06));border:10px solid rgba(110,231,183,0.12);color:var(--success)}
-    .result.fail{background:linear-gradient(90deg, rgba(255,107,107,0.08), rgba(255,107,107,0.04));border:10px solid rgba(255,107,107,0.08);color:var(--danger)}
+    input.final-input{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit}
+    .result{margin-top:12px;padding:10px;border-radius:8px}
+    .result.success{background:linear-gradient(90deg, rgba(110,231,183,0.12), rgba(110,231,183,0.06));border:1px solid rgba(110,231,183,0.12);color:var(--success)}
+    .result.fail{background:linear-gradient(90deg, rgba(255,107,107,0.08), rgba(255,107,107,0.04));border:1px solid rgba(255,107,107,0.08);color:var(--danger)}
     @keyframes fadeIn{to{opacity:1}}
-    /* enhanced readability for correct/incorrect labels */
     .correct-big{color:var(--success);font-weight:800;font-size:20px}
     .incorrect-red{color:var(--danger);font-weight:700}
   </style>
@@ -38,12 +37,12 @@
   <div class="wrap">
     <header>
       <div>
-        <h1>Ghigliottina — Gioco di parole<p> GIOCO #3 </p></h1>
-        <div class="rules"><p> </p> Scegli i 5 indizi. <p> </p> Ogni scelta sbagliata dimezza il punteggio.<p> </p> Hai 3 minuti per indovinare la parola.<p> </p> Bonus per i secondi risparmiati! </div>
+        <h1>Ghigliottina — Gioco di parole</h1>
+        <div class="rules">Scegli i 5 indizi. Ogni scelta sbagliata dimezza il punteggio. <p> </p> Hai 3 minuti per indovinare la parola. Bonus per i secondi risparmiati!</div>
       </div>
       <div class="status">
-        <div class="score">Punteggio: <span id="score">16000</span></div>
-        <div class="small">Errori: <span id="errors">0</span>/6</div>
+        <div class="score">Punteggio: <span id="score">4800</span></div>
+        <div class="small">Errori: <span id="errors">0</span>/5</div>
         <div class="timer">Tempo rimasto: <span id="gameTimer">180</span></div>
       </div>
     </header>
@@ -62,12 +61,13 @@
         </div>
 
         <div class="card" style="margin-top:12px">
-          <div class="small">Inserisci qui la parola finale (si attiva dopo il 5° indizio)</div>
+          <div class="small">Inserisci qui la parola finale </div>
           <input id="finalInput" class="final-input" placeholder="Scrivi la parola finale..." disabled />
           <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
             <button id="submitFinal" class="btn" disabled>Invia</button>
           </div>
           <div id="resultBox"></div>
+          <button id="revealBtn" style="margin-top:12px; display:none; padding:10px 14px; font-weight:700; border-radius:8px; border:1px solid rgba(255,255,255,0.04); background:var(--card); color:var(--accent); cursor:pointer; width:100%">Rivela la parola</button>
         </div>
 
         <div class="card" style="margin-top:12px">
@@ -77,7 +77,7 @@
       </div>
     </div>
 
-    <footer> <p> </p> Designed by Nero Tulip <p> </p> </footer>
+    <footer>Designed by Nero Tulip</footer>
   </div>
 
   <script id="gameData" type="application/json">
@@ -94,9 +94,9 @@
   </script>
 
 <script>
-// Game engine (cleaned and fixed)
+/* ------- Game engine ------- */
 class GhigliottinaGame {
-  constructor(baseScore = 16000){
+  constructor(baseScore = 4800){
     this.baseScore = baseScore;
     this.reset();
   }
@@ -110,15 +110,14 @@ class GhigliottinaGame {
   reset(){
     this.score = this.baseScore;
     this.errors = 0;
-    this.round = 0; // 0..4
+    this.round = 0;
     this.history = [];
     this.finalPhase = false;
   }
 
-  // process a choice; correctWord is the true hint (pair[0])
   pick(isCorrect, correctWord){
     if(!isCorrect){
-      this.score = this.score / 2;
+      this.score = Math.floor(this.score / 2);
       this.errors += 1;
     }
     this.history.push({round: this.round + 1, correct: !!isCorrect, correctWord: correctWord});
@@ -127,36 +126,26 @@ class GhigliottinaGame {
 
   nextRound(){
     this.round += 1;
-    return this.round >= 5; // true if we've reached final phase
+    return this.round >= 5;
   }
 
-  // final guess check
   checkFinal(guess){
     const norm = s => String(s).normalize('NFD').replace(/\p{Diacritic}/gu,'').trim().toUpperCase();
     const win = norm(guess) === norm(this.word);
-    if(win){
-      this.score += 22200;
-    } else {
-      this.score = this.score / 2;
-      this.errors += 1;
-    }
+    if(win){ this.score += 5200; }
+    else { this.score = Math.floor(this.score / 2); this.errors += 1; }
     return win;
   }
 }
 
-// Load data
+/* ------- UI Layer ------- */
 const dataScript = document.getElementById('gameData');
 let initialData;
-try{
-  initialData = JSON.parse(dataScript.textContent);
-} catch(e){
-  initialData = { word: 'RADIO', pairs: [] };
-}
+try{ initialData = JSON.parse(dataScript.textContent); } catch(e){ initialData = { word: 'SALTO', pairs: [] }; }
 
-const game = new GhigliottinaGame(16000);
+const game = new GhigliottinaGame(4800);
 game.load(initialData);
 
-// UI refs
 const scoreEl = document.getElementById('score');
 const errorsEl = document.getElementById('errors');
 const roundInfo = document.getElementById('roundInfo');
@@ -167,6 +156,7 @@ const finalInput = document.getElementById('finalInput');
 const submitFinal = document.getElementById('submitFinal');
 const resultBox = document.getElementById('resultBox');
 const historyEl = document.getElementById('history');
+const revealBtn = document.getElementById('revealBtn');
 const gameTimerEl = document.getElementById('gameTimer');
 
 let chosenThisRound = null;
@@ -190,7 +180,7 @@ function startTimer(){
     if(totalTimeLeft <= 0){
       clearInterval(gameTimer);
       if(!game.finalPhase){
-        game.score = game.score / 2;
+        game.score = Math.floor(game.score / 2);
         finishFinal(false, 'Tempo scaduto');
       }
     }
@@ -202,13 +192,11 @@ function renderPairs(){
   if(game.round >= 5){ startFinalPhase(); return; }
   const pair = pairOrder[game.round];
   const correctOnA = Math.random() < 0.5;
-
-  // show bold text visually using CSS class instead of markdown asterisks
   const aText = correctOnA ? pair[0] : pair[1];
   const bText = correctOnA ? pair[1] : pair[0];
 
-  choiceA.textContent = `   ${aText}`;
-  choiceB.textContent = `   ${bText}`;
+  choiceA.textContent = `  ${aText}`;
+  choiceB.textContent = `  ${bText}`;
 
   choiceA.dataset.correct = correctOnA ? 'yes' : 'no';
   choiceB.dataset.correct = correctOnA ? 'no' : 'yes';
@@ -225,11 +213,10 @@ function renderPairs(){
 
 function pickChoice(btn){
   if(chosenThisRound || game.finalPhase) return;
-  // start countdown at first pick
   startTimer();
 
   const isCorrect = btn.dataset.correct === 'yes';
-  const correctWord = btn.dataset.correctWord; // true hint for this round
+  const correctWord = btn.dataset.correctWord;
   chosenThisRound = btn.textContent.charAt(0);
 
   choiceA.disabled = true;
@@ -246,14 +233,12 @@ function pickChoice(btn){
   if(isCorrect){
     li.innerHTML = `Hai scelto ${chosenThisRound} — <span class="correct-big">${escapeHtml(selText)}</span> (corretto)`;
   } else {
-    // show chosen in red and the correct hint in green big
     li.innerHTML = `Hai scelto ${chosenThisRound} — <span class="incorrect-red">${escapeHtml(selText)}</span>. La parola giusta era: <span class="correct-big">${escapeHtml(correctWord)}</span>`;
   }
 
   historyEl.appendChild(li);
   updateUI();
 
-  // small delay then procedi al round successivo (o alla finale)
   setTimeout(()=>{
     const toFinal = game.nextRound();
     if(toFinal){ renderPairs(); startFinalPhase(); }
@@ -269,7 +254,6 @@ function startFinalPhase(){
 }
 
 function finishFinal(win, message){
-  // stop global timer
   if(gameTimer){ clearInterval(gameTimer); gameTimer = null; }
 
   // apply time bonus (seconds left × 10)
@@ -279,17 +263,19 @@ function finishFinal(win, message){
   finalInput.disabled = true;
   submitFinal.disabled = true;
 
+  // show reveal button
+  revealBtn.style.display = 'block';
+
   if(win){
     resultBox.innerHTML = `<div class="result success">${escapeHtml(message)}. Punteggio finale: <strong>${Math.round(game.score)}</strong></div>`;
   } else {
-    // do NOT reveal the secret word when wrong — only show score
     resultBox.innerHTML = `<div class="result fail">${escapeHtml(message)}. Punteggio finale: <strong>${Math.round(game.score)}</strong></div>`;
   }
 
   updateUI();
 }
 
-// safe HTML escape for user-provided strings (very small util)
+// safe HTML escape for user-provided strings
 function escapeHtml(str){
   return String(str)
     .replace(/&/g, '&amp;')
@@ -300,20 +286,22 @@ function escapeHtml(str){
 }
 
 // Events
+revealBtn.addEventListener('click', ()=>{
+  revealBtn.style.display = 'none';
+  resultBox.innerHTML += `<div style="margin-top:12px; font-size:22px; font-weight:800; color:var(--accent)">Parola corretta: ${escapeHtml(game.word)}</div>`;
+});
 choiceA.addEventListener('click', ()=>pickChoice(choiceA));
 choiceB.addEventListener('click', ()=>pickChoice(choiceB));
 submitFinal.addEventListener('click', ()=>{
   const guess = (finalInput.value || '').trim();
   if(!guess){ alert('Inserisci una parola.'); return; }
-  const win = game.checkFinal(guess); // check final and apply win/lose logic
+  const win = game.checkFinal(guess);
   finishFinal(win, win ? 'Hai indovinato' : 'Risposta errata');
 });
 
-// Init
 (function init(){
-  // ensure pairs length
   if(!Array.isArray(pairOrder) || pairOrder.length < 5){
-    pairOrder = [ ['emittente','tilde'], ['onde','ombre'], ['trasmettere','trasgredire'], ['FM','DM'], ['stazione','stazione2'] ];
+    pairOrder = [ ['RISO','PASTA'], ['QUALITÀ','QUANTITÀ'], ['CASCATA','FIUME'], ['SPECIE','GENERE'], ['VUOTO','PIENO'] ];
   }
   renderPairs();
   updateUI();
