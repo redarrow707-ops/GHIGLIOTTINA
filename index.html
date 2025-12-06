@@ -82,13 +82,13 @@
 
   <script id="gameData" type="application/json">
   {
-    "word": "SALTO",
+    "word": "ORECCHIO",
     "pairs": [
-      ["RISO","PASTA"],
-      ["QUALITÀ","QUANTITÀ"],
-      ["CASCATA","FIUME"],
-      ["SPECIE","GENERE"],
-      ["VUOTO","PIENO"]
+      ["PRESTARE","DONARE"],
+      ["DURO","DOLCE"],
+      ["AVERE","ESSERE"],
+      ["ASSOLUTO","DISSOLUTO"],
+      ["PULCE","PULCINO"]
     ]
   }
   </script>
@@ -141,7 +141,7 @@ class GhigliottinaGame {
 /* ------- UI Layer ------- */
 const dataScript = document.getElementById('gameData');
 let initialData;
-try{ initialData = JSON.parse(dataScript.textContent); } catch(e){ initialData = { word: 'SALTO', pairs: [] }; }
+try{ initialData = JSON.parse(dataScript.textContent); } catch(e){ initialData = { word: 'ORECCHIO', pairs: [] }; }
 
 const game = new GhigliottinaGame(16000);
 game.load(initialData);
