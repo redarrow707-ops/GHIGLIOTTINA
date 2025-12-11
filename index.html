@@ -37,7 +37,7 @@
   <div class="wrap">
     <header>
       <div>
-        <h1>Ghigliottina — Gioco #6 <p> </p> </h1>
+        <h1>Ghigliottina — Gioco #7 <p> </p> </h1>
         <div class="rules">Scegli i 5 indizi. Ogni scelta sbagliata dimezza il punteggio. <p> </p> Hai 3 minuti per indovinare la parola. Bonus per i secondi risparmiati!</div>
       </div>
       <div class="status">
@@ -82,13 +82,13 @@
 
   <script id="gameData" type="application/json">
   {
-    "word": "CAMPO",
+    "word": "UOVO",
     "pairs": [
-      ["RUGBY","RALLY"],
-      ["OSPEDALE","CLINICA"],
-      ["PIAZZA","PORTA"],
-      ["LIBERO","LIBRO"],
-      ["RICERCA","RICARICA"]
+      ["POSIZIONE","CONTATTO"],
+      ["OGGI","IERI"],
+      ["CHIARA","FRANCA"],
+      ["PIENO","FIENO"],
+      ["GIORNATA","BELLA"]
     ]
   }
   </script>
@@ -141,7 +141,7 @@ class GhigliottinaGame {
 /* ------- UI Layer ------- */
 const dataScript = document.getElementById('gameData');
 let initialData;
-try{ initialData = JSON.parse(dataScript.textContent); } catch(e){ initialData = { word: 'CAMPO', pairs: [] }; }
+try{ initialData = JSON.parse(dataScript.textContent); } catch(e){ initialData = { word: 'UOVO', pairs: [] }; }
 
 const game = new GhigliottinaGame(16000);
 game.load(initialData);
@@ -301,7 +301,7 @@ submitFinal.addEventListener('click', ()=>{
 
 (function init(){
   if(!Array.isArray(pairOrder) || pairOrder.length < 5){
-    pairOrder = [ ['RUGBY','RALLY'], ['OSPEDALE','CLINICA'], ['PIAZZA','PORTA'], ['LIBERO','LIBRO'], ['RICERCA','RICARICA'] ];
+    pairOrder = [ ['POSIZIONE','CONTATTO'], ['OGGI','IERI'], ['CHIARA','FRANCA'], ['PIENO','FIENO'], ['GIORNATA','BELLA'] ];
   }
   renderPairs();
   updateUI();
