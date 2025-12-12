@@ -37,7 +37,7 @@
   <div class="wrap">
     <header>
       <div>
-        <h1>Ghigliottina — Gioco #7 <p> </p> </h1>
+        <h1>Ghigliottina — Gioco #8 <p> </p> </h1>
         <div class="rules">Scegli i 5 indizi. Ogni scelta sbagliata dimezza il punteggio. <p> </p> Hai 3 minuti per indovinare la parola. Bonus per i secondi risparmiati!</div>
       </div>
       <div class="status">
@@ -82,13 +82,13 @@
 
   <script id="gameData" type="application/json">
   {
-    "word": "UOVO",
+    "word": "FONTE",
     "pairs": [
-      ["POSIZIONE","CONTATTO"],
-      ["OGGI","IERI"],
-      ["CHIARA","FRANCA"],
-      ["PIENO","FIENO"],
-      ["GIORNATA","BELLA"]
+      ["REDDITO","UTILE"],
+      ["ENERGIA","FORZA"],
+      ["NOTIZIA","NOIA"],
+      ["PERENNE","VOLATILE"],
+      ["UFFICIALE","CAPITANO"]
     ]
   }
   </script>
@@ -141,7 +141,7 @@ class GhigliottinaGame {
 /* ------- UI Layer ------- */
 const dataScript = document.getElementById('gameData');
 let initialData;
-try{ initialData = JSON.parse(dataScript.textContent); } catch(e){ initialData = { word: 'UOVO', pairs: [] }; }
+try{ initialData = JSON.parse(dataScript.textContent); } catch(e){ initialData = { word: 'FONTE', pairs: [] }; }
 
 const game = new GhigliottinaGame(16000);
 game.load(initialData);
