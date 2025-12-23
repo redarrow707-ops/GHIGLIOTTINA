@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Ghigliottina — Gioco di parole - Gioco #12 </title>
+  <title>Ghigliottina — Gioco di parole - Gioco #13 </title>
   <style>
     :root{--bg:#1c2a45;--card:#162135;--accent:#ffb86b;--muted:#9aa4b2;--success:#6ee7b7;--danger:#ff6b6b}
     *{box-sizing:border-box;font-family:Inter,Segoe UI,Arial,sans-serif}
@@ -37,7 +37,7 @@
   <div class="wrap">
     <header>
       <div>
-        <h1>Ghigliottina — Gioco #12 <p> </p> </h1>
+        <h1>Ghigliottina — Gioco #13 <p> </p> </h1>
         <div class="rules">Scegli i 5 indizi. Ogni scelta sbagliata dimezza il punteggio. <p> </p> Hai 3 minuti per indovinare la parola. Bonus per i secondi risparmiati!</div>
       </div>
       <div class="status">
@@ -82,13 +82,13 @@
 
   <script id="gameData" type="application/json">
   {
-    "word": "ONORE",
+    "word": "CASA",
     "pairs": [
-      ["VERO","FALSO"],
-      ["PUNTO","VIRGOLA"],
-      ["SALVA","SANA"],
-      ["GUARDIA","VIGILE"],
-      ["ARMI","GIOCATTOLO"]
+      ["FATTO","FINITO"],
+      ["DIAVOLO","BESTIA"],
+      ["MOBILE","FISSO"],
+      ["BIANCA","NEVE"],
+      ["NATALE","PASQUA"]
     ]
   }
   </script>
@@ -141,7 +141,7 @@ class GhigliottinaGame {
 /* ------- UI Layer ------- */
 const dataScript = document.getElementById('gameData');
 let initialData;
-try{ initialData = JSON.parse(dataScript.textContent); } catch(e){ initialData = { word: 'ONORE', pairs: [] }; }
+try{ initialData = JSON.parse(dataScript.textContent); } catch(e){ initialData = { word: 'CASA', pairs: [] }; }
 
 const game = new GhigliottinaGame(16000);
 game.load(initialData);
